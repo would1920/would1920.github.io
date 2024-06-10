@@ -1,0 +1,289 @@
+<html>
+    <head>
+        <style type="text/css">#outputDiv canvas{width:100%;height:100%;}.container{display:table;width:100%;height:100%}
+        .container div{display:table-row;}
+        #dropNotification{position:absolute;top:100px;left:20px;right:20px;text-align:center;pointer-events:none;}
+        .boxed{background-color:white;box-shadow:5px 5px 2px #999999;border:1px solid black;border-radius:10px;}
+        .boxeds{background-color:yellow;box-shadow:5px 5px 2px #999999;border:1px solid black;border-radius:10px;
+
+        }
+        #aboutBox{position:absolute;top:100px;left:25%;width:50%;padding-left:20px;padding-right:20px;}
+        img.round-image{border-radius:50%;}
+        #method{display:none;}
+        #color-grid{display:flex;flex-direction:column;align-items:flex-start;}
+        .color-row{display:flex;width:100%;justify-content:space-evenly;margin-bottom:10px;}
+        .color-block{width:50px;height:50px;}
+        .color-block-label{width:50px;text-align:center;}</style>
+	<title>Cvisim Color Vision Simulator</title>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js'></script>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css'/>
+    </head>
+    <body>
+        <div id="aboutBox" class="boxed">
+            <div align="center" ><img src="./Logo.jpg" class="round-image" width="150"/></div>
+    <h1 align="center">Cvisim Color Vision Simulator - JLU-CP</h1>
+    <div class="boxeds" align="center">
+    <p>    Are you as curious as I am about what the world looks like for people with color vision deficiency? What do traffic lights, the ocean, and the sun look like to them? How much difficulty do they encounter in their daily lives?</p>
+
+    <p>    We have built a website that can simulate different types of color vision deficiency.</p>
+        
+    <p>    Even more interesting, by uploading photos from your album, you can view these photos from the perspective of different types of color vision deficiency.</p>
+    </div>
+    <h2>Our Philosophy</h2>
+
+    <p>We aim to draw more attention to the world of individuals with color vision deficiencies and assistive design for accessibility. This year, our team JLU-CP has designed a color and odor system based on emotion-weighted algorithms. The right to self-expression should never be limited to the majority. This time, we want to turn the spotlight of education towards those "minority" individuals around us.</p>
+    <h2>Instructions</h2>
+    <p>Use the file selector in the top left corner to <strong>drag and drop</strong> or <strong>paste</strong> an image to load it. Then, you can choose different simulation modes to simulate different types of color vision.</p>
+    <p>All processing is done locally in your browser; the image will not be uploaded to the server.</p>
+    <p>You can move the displayed image by clicking and dragging, and zoom by (holding the Shift key) double-clicking or using the mouse wheel.</p>
+    <p>The lens feature allows you to view the original image around the mouse area. The abnormal lens will show both the original and simulated images around the mouse area.</p>
+    <h2>Types of Color Vision:</h2>
+    <ul>
+        <li>Normal Color Vision: Displays the original image</li>
+        <li>Protanopia: Missing L-cones</li>
+        <li>Protanomaly: L-cones sensitivity curve shifted</li>
+        <li>Deuteranopia: Missing M-cones</li>
+        <li>Deuteranomaly: M-cones sensitivity curve shifted</li>
+        <li>Tritanopia: Missing S-cones</li>
+        <li>Tritanomaly: Abnormal S-cones</li>
+        <li>Achromatopsia (no simulation of light sensitivity or poor vision): Missing all types of cones</li>
+        <li>Mesopic Vision: Normal vision under twilight conditions, both cones and rods dominate vision (Purkinje effect)</li>
+        <li>Tetartanopia: Hypothetical condition, no real-world instances known</li>
+        <li>Tetartanomaly: Same as above</li>
+        <li>Blue-Cone Monochromacy: Only S-cones work properly</li>
+        <li>Red-Cone Monochromacy: Only L-cones work properly</li>
+        <li>Green-Cone Monochromacy: Only M-cones work properly</li>
+        <li>Flip Red-Blue: Swap R and B channels, helps color vision deficiency</li>
+        <li>Grayscale: Converts the image to grayscale, not representing any color vision deficiency</li>
+    </ul>
+    <h2>Simulation Methods</h2>
+    <p>Most of the code for this simulation comes from MaPePeR's open-source simulator <a href="http://mapeper.github.io/jsColorblindSimulator/">http://mapeper.github.io/jsColorblindSimulator/</a>, thanks to them.</p>
+    <p>Simon-Liedtke, J. T., & Farup, I. (2016) compared various simulation methods and concluded that Brettel's simulation is the most accurate.</p>
+    <p>This page uses the Brettel et al. 1997 method for simulating abnormal trichromacy and dichromacy (except Tetartan), which is more accurate than the commonly used HCIRN method.</p>
+    <p>Tetartan uses the HCIRN method, as this type of color vision deficiency is theoretical and only approximated.</p>
+    <p>Monochromacy is simulated using the sRGB->LMS->remove two channels->sRGB method, based on theoretical assumptions and not validated, thus not guaranteed to be accurate.</p>
+    <p>Achromatopsia simulation process is sRGB->linearRGB->simulate->sRGB, verified by only one person with achromatopsia and not guaranteed to be accurate.</p>
+    <h2>Accuracy for Those with Color Vision Deficiency</h2>
+    <ul>
+        <li>For any color vision deficiency, "Normal Color Vision" and "Mesopic Vision" are inaccurate.</li>
+        <li>For red-green deficiencies, "Protanomaly" or "Deuteranomaly" will simulate a more severe form, "Mesopic Vision" can simulate twilight conditions, others are seen as by those with normal vision.</li>
+        <li>For blue deficiency, "Tritanomaly" simulates a more severe form, red-green deficiencies and yellow deficiencies are inaccurate, "Mesopic Vision" simulates twilight conditions, others are seen as by those with normal vision.</li>
+        <li>For red-green blindness, "Protanomaly" and "Deuteranomaly" simulations are inaccurate on top of red-green deficiency inaccuracies.</li>
+        <li>For blue blindness, "Tritanomaly" simulation is inaccurate on top of blue deficiency inaccuracies.</li>
+        <li>For monochromacy (e.g., achromatopsia, blue-cone monochromacy), only monochromatic simulations are accurate.</li>
+    </ul>
+    <h2>Accessibility Design - Color Picker</h2>
+    <input type="color" id="color-picker">
+    <button onclick="addToList()">Add to List</button>
+    <div id="color-grid">
+        <div id="color-row-header" class="color-row">
+            <div class="color-block-label">Normal</div>
+            <div class="color-block-label">Protanopia</div>
+            <div class="color-block-label">Deuteranopia</div>
+            <div class="color-block-label">Tritanopia</div>
+            <div class="color-block-label">Achromatopsia</div>
+        </div>
+    </div>
+<script>function hexToRgb(hex){var result=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);return result?[parseInt(result[1],16),parseInt(result[2],16),parseInt(result[3],16)]:null}function rgbToCss(rgb){return`rgb(${rgb[0]},${rgb[1]},${rgb[2]})`}function addToList(){var colorPicker=document.getElementById("color-picker");var originalRgb=hexToRgb(colorPicker.value);var protanRgb=brettel(originalRgb,'protan',1.0);var deutanRgb=brettel(originalRgb,'deutan',1.0);var tritanRgb=brettel(originalRgb,'tritan',1.0);var achromatopsiaRgb=monochrome_with_severity(originalRgb,1.0);var colorGrid=document.getElementById("color-grid");var colors=[originalRgb,protanRgb,deutanRgb,tritanRgb,achromatopsiaRgb].map(rgbToCss);var colorRow=document.createElement("div");colorRow.className="color-row";for(var i=0;i<colors.length;i++){var colorBlock=document.createElement("div");colorBlock.className="color-block";colorBlock.style.backgroundColor=colors[i];colorRow.appendChild(colorBlock)}colorGrid.appendChild(colorRow)}</script>
+        </div>
+        <div class="container" style="">
+            <div>
+                <input type="file" id="fileInput"/>
+
+                <label><input type="radio" name="colorblindType" value="Normal" checked/>Normal Vision</label>
+                <label><input type="radio" name="colorblindType" value="Protanopia"/>Protanopia</label>
+                <label><input type="radio" name="colorblindType" value="Protanomaly"/>Protanomaly</label>
+                <label><input type="radio" name="colorblindType" value="Protanomaly2"/>Moderate Protanomaly</label>
+                <label><input type="radio" name="colorblindType" value="Deuteranopia"/>Deuteranopia</label>
+                <label><input type="radio" name="colorblindType" value="Deuteranomaly"/>Deuteranomaly</label>
+                <label><input type="radio" name="colorblindType" value="Deuteranomaly2"/>Moderate Deuteranomaly</label>
+                <label><input type="radio" name="colorblindType" value="Tritanopia"/>Tritanopia</label>
+                <label><input type="radio" name="colorblindType" value="Tritanomaly"/>Tritanomaly</label>
+                <label><input type="radio" name="colorblindType" value="Achromatopsia"/>Achromatopsia</label>
+                <label><input type="radio" name="colorblindType" value="Achromatomaly"/>Achromatomaly</label>
+                <label><input type="radio" name="colorblindType" value="Tetartanopia"/>Tetartanopia</label>
+                <label><input type="radio" name="colorblindType" value="Tetartanomaly"/>Tetartanomaly</label>
+                <label><input type="radio" name="colorblindType" value="BCM"/>Blue Cone Monochromacy</label>
+                <label><input type="radio" name="colorblindType" value="RCM"/>Red Cone Monochromacy</label>
+                <label><input type="radio" name="colorblindType" value="GCM"/>Green Cone Monochromacy</label>
+                <label><input type="radio" name="colorblindType" value="Flip"/>Red-Green Channel Swap</label>
+                <label><input type="radio" name="colorblindType" value="Grayscale"/>Grayscale</label>
+                <label style="margin-left: 1em;display: none;">Severity:<input type="range" min="0" max="100" value="50" class="slider" id="severity"></label>
+<select id="method">
+    <option value="simpl">Simple (ColorMatrix)</option>
+    <option value="hcirn">Non-commercial-only (HCIRN)</option>
+    <option value="brett" selected>Accurate (Brettel et al. 1997)</option>
+    <option value="macha">Accurate (Machado et al. 2009)</option>
+</select>
+<br/>
+<label><input type="radio" name="lens" value="No" checked/>No Lens</label>
+<label><input type="radio" name="lens" value="Normal"/>Normal Lens</label>
+<label><input type="radio" name="lens" value="Inverse"/>Inverse Lens</label>
+&nbsp; <a href="#" onclick="panZoomImage.translateX=0;panZoomImage.translateY=0;panZoomImage.scale=1;panZoomImage.redraw();">Reset View</a>
+&nbsp; <a href="#" target="blank" id="imageLink" style="display: none">Open Simulated Image in New Window</a>
+<span id="loadingIndicator" style="display:none">&nbsp;Generating Simulated Image...</span>
+            </div>
+            <div>
+                <hr/>
+            </div>
+            <div style="height: 100%" id="canvasDiv">
+                <div id="dropNotification" class="boxed" style="display: none"><h1>Drop your image to load it</h1></div>
+                <canvas id="outCanvas">Your Browser does not support &lt;canvas&gt;. Get an upgrade!</canvas>
+            </div>
+        </div>
+        <script src="panZoomImage.js"></script>
+        <script src="brettel_colorblind_simulation.js"></script>
+        <script src="hcirn_colorblind_simulation.js"></script>
+        <script src="colorblind.js"></script>
+        <script type="text/javascript">
+
+var loadingIndicator = document.getElementById('loadingIndicator');
+function filterOrImageChanged() {
+
+    var type = document.querySelector('input[name = "colorblindType"]:checked').value;
+	var method;
+	if (type == "Tetartanopia" || type == "Tetartanomaly") {
+		method = "hcirn";
+	}
+	else {
+		method = "brett";
+	}
+    var filterName = method + type;
+    console.log("filterOrImageChanged: " + filterName);
+
+    document.getElementById('imageLink').style.display = type === "Normal" ? "none" : "inline";
+    var isMachado = method == "macha";
+    document.getElementById('severity').parentElement.style.display = isMachado ? 'inline' : 'none';
+    ['Protanopia', 'Deuteranopia', 'Tritanopia', 'Achromatopsia', 'Tetartanopia', 'Tetartanomaly', 'BCM', 'RCM', 'GCM', 'Flip', 'Grayscale'].forEach((item, i) => {
+        document.querySelector('input[type="radio"][value="' + item + '"]').parentElement.style.display = isMachado ? 'none' : 'inline';
+    });
+    if (method == 'macha' && type != "Normal") {
+        filterName += "_" + document.getElementById('severity').value
+    }
+
+
+    if (currentImage) {
+        loadingIndicator.style.display="inline";
+        NProgress.set(0.2);
+        setTimeout(function () {
+            getFilteredImage(currentImage, filterName, function (filteredImage, url) {
+                document.getElementById('imageLink').href = url;
+                panZoomImage.displayImage(filteredImage);
+                NProgress.done();
+                loadingIndicator.style.display="none";
+            });
+        }, 0);
+    }
+}
+
+function lensChanged() {
+    var v = document.querySelector('input[name = "lens"]:checked').value;
+    if (v === "No") {
+        panZoomImage.lens = 0;
+    } else if (v === "Normal") {
+        panZoomImage.lens = 1;
+    } else if (v === "Inverse") {
+        panZoomImage.lens = 2;
+    } else {
+        throw "Illegal Lens Type";
+    }
+    panZoomImage.redraw();
+}
+(function() {
+    var radios = document.querySelectorAll('input[name = "colorblindType"]');
+    var i;
+    for (i = 0; i < radios.length; i++) {
+        radios[i].onclick = filterOrImageChanged;
+    }
+    radios = document.querySelectorAll('input[name = "lens"]');
+    for (i = 0; i < radios.length; i++) {
+        radios[i].onclick = lensChanged;
+    }
+    document.getElementById("method").onchange = filterOrImageChanged;
+    document.getElementById("severity").onchange = filterOrImageChanged;
+	document.getElementById("fileInput").onchange = filterOrImageChanged;
+})();
+
+//Based on http://stackoverflow.com/a/3814285/2256700
+var fileInput = document.getElementById('fileInput');
+var currentImage;
+fileInput.onchange = function (evt) {
+    var tgt = evt.target || window.event.srcElement,
+        files = tgt.files;
+    readFile(files);
+};
+
+function readFile(files) {
+    document.getElementById("aboutBox").style.display = "none";
+    // FileReader support
+    if (FileReader && files && files.length) {
+        if (files.length !== 1) {
+            alert("Can only show one file at a time");
+            return;
+        }
+        if (!files[0].type.match('image.*')) {
+            alert("Was not an image file. :(");
+            return;
+        }
+        NProgress.set(0.0);
+        var fr = new FileReader();
+        fr.onload = function () {
+            var img = new Image();
+            img.onload = function () {
+                //createFilteredImage(this);
+                currentImage = this;
+                panZoomImage.setHiddenLensImage(currentImage);
+                clearImageCache();
+                filterOrImageChanged();
+            };
+            img.src = fr.result;
+        };
+        fr.readAsDataURL(files[0]);
+    }
+    // Not supported
+    else {
+        alert("Your Browser does not support the required Features.");
+    }
+}
+var canvasDiv = document.getElementById("canvasDiv");
+var dropNotification = document.getElementById("dropNotification");
+// Based on http://www.html5rocks.com/en/tutorials/file/dndfiles/
+canvasDiv.addEventListener('drop', function (evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    dropNotification.style.display = "none";
+    readFile(evt.dataTransfer.files);
+}, false);
+
+canvasDiv.addEventListener('dragover', function (evt) {
+    document.getElementById("aboutBox").style.display = "none";
+    evt.stopPropagation();
+    evt.preventDefault();
+    dropNotification.style.display = "block";
+    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+}, false);
+
+canvasDiv.addEventListener('dragleave', function (evt) {
+    dropNotification.style.display = "none";
+}, false);
+
+//Retrieve Image from Clipboard: http://stackoverflow.com/a/15369753/2256700
+document.onpaste = function (event) {
+    // use event.originalEvent.clipboard for newer chrome versions
+    var items = (event.clipboardData  || event.originalEvent.clipboardData).items;
+    // find pasted image among pasted items
+    var blob = null;
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") === 0) {
+            blob = items[i].getAsFile();
+        }
+    }
+    // load image if there is a pasted image
+    if (blob !== null) {
+        readFile([blob]);
+    }
+};
+        </script>
+    </body>
+</html>
