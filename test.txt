@@ -1,1 +1,1 @@
-Hello, World!
+http://url.ni8.co/api/v1/client/subscribe?token=20653fed67fe58e3a49df27a3be919cc
